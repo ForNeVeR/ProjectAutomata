@@ -41,7 +41,11 @@ namespace ProjectAutomata
 
 		private Project OpenProject()
 		{
-			var msProject = new Application();
+			var msProject = new Application
+			{
+				Visible = true
+			};
+
 			var application = msProject.Application;
 			var project = application.Projects.Add();
 			return project;
