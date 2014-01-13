@@ -8,8 +8,8 @@
     <ProjectGuid>{97AFC138-7AEC-4CBE-BC7A-322ED9DAE728}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ConsoleApplication2</RootNamespace>
-    <AssemblyName>ConsoleApplication2</AssemblyName>
+    <RootNamespace>ProjectAutomata</RootNamespace>
+    <AssemblyName>ProjectAutomata</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -32,6 +32,9 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>ProjectAutomata.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />

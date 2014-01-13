@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Office.Interop.MSProject;
 
-namespace ConsoleApplication2
+namespace ProjectAutomata
 {
 	class Importer
 	{

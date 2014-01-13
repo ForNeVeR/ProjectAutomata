@@ -3,7 +3,7 @@ using System.Linq;
 using Microsoft.Office.Interop.MSProject;
 using Exception = System.Exception;
 
-namespace ConsoleApplication2
+namespace ProjectAutomata
 {
 	internal class Program
 	{
