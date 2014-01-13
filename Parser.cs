@@ -9,14 +9,15 @@ namespace ProjectAutomata
 {
 	class Parser
 	{
-		private static readonly Regex _taskHeader = new Regex(@"^(\**)(?: \[(.*?)\])? (.*)$", RegexOptions.Compiled);
+		private static readonly Regex TaskHeader = new Regex(@"^(\*+)(?: \[(.*?)\])? (.*)$", RegexOptions.Compiled);
+		private static readonly Regex Number = new Regex(@"\d+", RegexOptions.Compiled);
 		
 		public IEnumerable<TaskDescription> Parse(string fileName)
 		{
 			TaskDescription task = null;
 			foreach (var line in File.ReadLines(fileName))
 			{
-				var match = _taskHeader.Match(line);
+				var match = TaskHeader.Match(line);
 				if (match.Success)
 				{
 					if (task != null)
@@ -37,6 +38,11 @@ namespace ProjectAutomata
 					task.Note += " " + line;
 				}
 			}
+
+			if (task != null)
+			{
+				yield return task;
+			}
 		}
 
 		private TimeSpan ParseEstimation(string estimation)
@@ -46,8 +52,7 @@ namespace ProjectAutomata
 				return TimeSpan.Zero;
 			}
 			
-			var regex = new Regex(@"\d+");
-			var match = regex.Match(estimation);
+			var match = Number.Match(estimation);
 			return TimeSpan.FromHours(int.Parse(match.Value));
 		}
 	}

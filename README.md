@@ -32,6 +32,8 @@ Standard org file format. Task definition should be written as follows:
     Any number of description lines
     ...
 
+More formally, task header should match the regular expression `^(\*+)(?: \[(.*?)\])? (.*)$`.
+
 Outline indentation should be consistent (i.e. no skipped levels).
     
 ## Build
