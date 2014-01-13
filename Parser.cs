@@ -9,7 +9,7 @@ namespace ConsoleApplication2
 {
 	class Parser
 	{
-		private static readonly Regex _taskHeader = new Regex(@"^(\**) \[(.*?)\] (.*)$", RegexOptions.Compiled);
+		private static readonly Regex _taskHeader = new Regex(@"^(\**)(?: \[(.*?)\])? (.*)$", RegexOptions.Compiled);
 		
 		public IEnumerable<TaskDescription> Parse(string fileName)
 		{
@@ -41,6 +41,11 @@ namespace ConsoleApplication2
 
 		private TimeSpan ParseEstimation(string estimation)
 		{
+			if (string.IsNullOrEmpty(estimation))
+			{
+				return TimeSpan.Zero;
+			}
+			
 			var regex = new Regex(@"\d+");
 			var match = regex.Match(estimation);
 			return TimeSpan.FromHours(int.Parse(match.Value));
