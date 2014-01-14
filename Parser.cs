@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace ProjectAutomata
@@ -10,7 +8,7 @@ namespace ProjectAutomata
 	class Parser
 	{
 		private static readonly Regex TaskHeader = new Regex(@"^(\*+)(?: \[(.*?)\])? (.*)$", RegexOptions.Compiled);
-		private static readonly Regex Number = new Regex(@"\d+", RegexOptions.Compiled);
+		private static readonly Regex Number = new Regex(@"\d+(\.\d+)?", RegexOptions.Compiled);
 		
 		public IEnumerable<TaskDescription> Parse(string fileName)
 		{
@@ -29,13 +27,19 @@ namespace ProjectAutomata
 					{
 						Level = match.Groups[1].Value.Length,
 						Estimation = ParseEstimation(match.Groups[2].Value),
-						Name = match.Groups[3].Value,
-						Note = string.Empty
+						Name = match.Groups[3].Value
 					};
 				}
 				else if (task != null)
 				{
-					task.Note += " " + line;
+					if (task.Note == null)
+					{
+						task.Note = line;
+					}
+					else
+					{
+						task.Note += "\n" + line;
+					}
 				}
 			}
 
@@ -53,7 +57,7 @@ namespace ProjectAutomata
 			}
 			
 			var match = Number.Match(estimation);
-			return TimeSpan.FromHours(int.Parse(match.Value));
+			return TimeSpan.FromHours(double.Parse(match.Value));
 		}
 	}
 }
