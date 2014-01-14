@@ -1,30 +1,17 @@
 ﻿using System;
-using System.Linq;
-using Microsoft.Office.Interop.MSProject;
-using Exception = System.Exception;
 
 namespace ProjectAutomata
 {
 	internal class Program
 	{
-		private class ProjectTask
-		{
-			public string Name { get; private set; }
-			public TimeSpan Duration { get; private set; }
-			public TimeSpan Work { get; private set; }
-			public ProjectTask[] Subtasks { get; private set; }
-
-			public ProjectTask(Task task)
-			{
-				Name = task.Name;
-				Duration = TimeSpan.FromMinutes(task.Duration);
-				Work = TimeSpan.FromMinutes(task.Work);
-				Subtasks = task.OutlineChildren.Cast<Task>().Select(t => new ProjectTask(t)).ToArray();
-			}
-		}
-		
 		private static void Main(string[] args)
 		{
+			if (args.Length < 2)
+			{
+				PrintUsage();
+				return;
+			}
+
 			var command = args[0];
 			var fileName = args[1];
 
@@ -36,7 +23,17 @@ namespace ProjectAutomata
 				case "export":
 					Export(fileName);
 					break;
+				default:
+					PrintUsage();
+					break;
 			}
+		}
+
+		private static void PrintUsage()
+		{
+			Console.WriteLine(@"Usage:
+    ProjectAutomata import filename.org
+    ProjectAutomata export filename.prj");
 		}
 
 		private static void Import(string fileName)
@@ -47,45 +44,8 @@ namespace ProjectAutomata
 
 		private static void Export(string fileName)
 		{
-			var msProject = new Application();
-			var application = msProject.Application;
-			if (!application.FileOpenEx(fileName))
-			{
-				throw new Exception("Cannot open file " + fileName);
-			}
-
-			var projects = application.Projects;
-			Project project = null;
-			foreach (var p in projects.Cast<Project>())
-			{
-				if (p.FullName == fileName)
-				{
-					project = p;
-					break;
-				}
-			}
-
-			if (project == null)
-			{
-				throw new Exception("Cannot find project");
-			}
-
-			var task = new ProjectTask(project.ProjectSummaryTask);
-			PrintTaskInfo(task);
-		}
-
-		private static void PrintTaskInfo(ProjectTask task, int indent = 0)
-		{
-			for (var i = 0; i < indent; ++i)
-			{
-				Console.Write(" ");
-			}
-
-			Console.WriteLine("{0} / {1} / {2}", task.Name, task.Duration, task.Work);
-			foreach (var subtask in task.Subtasks)
-			{
-				PrintTaskInfo(subtask, indent + 1);
-			}
+			var exporter = new Exporter();
+			exporter.Export(fileName);
 		}
 	}
 }
