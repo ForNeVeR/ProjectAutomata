@@ -39,14 +39,19 @@ namespace ProjectAutomata
 			PrintTaskInfo(task);
 		}
 
-		private static void PrintTaskInfo(ProjectTask task, int indent = 0)
+		private static void PrintTaskInfo(ProjectTask task, int indent = 1)
 		{
 			for (var i = 0; i < indent; ++i)
 			{
-				Console.Write(" ");
+				Console.Write("*");
 			}
 
-			Console.WriteLine("{0} / {1} / {2}", task.Name, task.Duration, task.Work);
+			Console.WriteLine(" [{0} h] {1}", task.Work.TotalHours, task.Name);
+			if (!string.IsNullOrEmpty(task.Notes))
+			{
+				Console.WriteLine(task.Notes);
+			}
+
 			foreach (var subtask in task.Subtasks)
 			{
 				PrintTaskInfo(subtask, indent + 1);

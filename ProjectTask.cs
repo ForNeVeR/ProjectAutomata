@@ -10,6 +10,7 @@ namespace ProjectAutomata
 		public TimeSpan Duration { get; private set; }
 		public TimeSpan Work { get; private set; }
 		public ProjectTask[] Subtasks { get; private set; }
+		public string Notes { get; private set; }
 
 		public ProjectTask(Task task)
 		{
@@ -17,6 +18,7 @@ namespace ProjectAutomata
 			Duration = TimeSpan.FromMinutes(task.Duration);
 			Work = TimeSpan.FromMinutes(task.Work);
 			Subtasks = task.OutlineChildren.Cast<Task>().Select(t => new ProjectTask(t)).ToArray();
+			Notes = task.Notes;
 		}
 	}
 }
