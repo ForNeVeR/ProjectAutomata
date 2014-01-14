@@ -13,12 +13,12 @@ namespace ProjectAutomata
 			CreateTasks(project, tasks);
 		}
 
-		private IEnumerable<TaskDescription> GetTasks(string fileName)
+		private IEnumerable<ProjectTask> GetTasks(string fileName)
 		{
 			var parser = new Parser();
 
-			var stack = new Stack<TaskDescription>();
-			var allTasks = new List<TaskDescription>(parser.Parse(fileName));
+			var stack = new Stack<ProjectTask>();
+			var allTasks = new List<ProjectTask>(parser.Parse(fileName));
 
 			foreach (var task in allTasks)
 			{
@@ -33,7 +33,7 @@ namespace ProjectAutomata
 					stack.Pop();
 				}
 
-				stack.Peek().Children.Add(task);
+				stack.Peek().Subtasks.Add(task);
 			}
 
 			return allTasks;
@@ -45,17 +45,17 @@ namespace ProjectAutomata
 			return project;
 		}
 
-		private void CreateTasks(Project project, IEnumerable<TaskDescription> tasks)
+		private void CreateTasks(Project project, IEnumerable<ProjectTask> tasks)
 		{
 			foreach (var taskDescription in tasks)
 			{
 				var task = project.Tasks.Add(taskDescription.Name);
 				task.OutlineLevel = (short)taskDescription.Level;
-				task.Notes = taskDescription.Note;
+				task.Notes = taskDescription.Notes;
 
-				if (taskDescription.Children.Count == 0)
+				if (taskDescription.Subtasks.Count == 0)
 				{
-					double work = taskDescription.Estimation.TotalMinutes;
+					double work = taskDescription.Work.TotalMinutes;
 					task.Work = work;
 				}
 			}
