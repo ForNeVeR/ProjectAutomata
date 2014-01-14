@@ -6,37 +6,28 @@ using Exception = System.Exception;
 
 namespace ProjectAutomata
 {
-	class Exporter
+	class Exporter : ProjectWorker
 	{
 		public void Export(string fileName)
 		{
 			fileName = Path.GetFullPath(fileName);
 
-			var msProject = new Application { Visible = true };
-			var application = msProject.Application;
-			if (!application.FileOpenEx(fileName))
+			if (!Application.FileOpenEx(fileName, true))
 			{
 				throw new Exception("Cannot open file " + fileName);
 			}
 
-			var projects = application.Projects;
-			Project project = null;
-			foreach (var p in projects.Cast<Project>())
-			{
-				if (p.FullName == fileName)
-				{
-					project = p;
-					break;
-				}
-			}
-
+			var project = Application.Projects.Cast<Project>().FirstOrDefault(p => p.FullName == fileName);
 			if (project == null)
 			{
 				throw new Exception("Cannot find project");
 			}
 
 			var task = new ProjectTask(project.ProjectSummaryTask);
-			PrintTaskInfo(task);
+			foreach (var subtask in task.Subtasks)
+			{
+				PrintTaskInfo(subtask);
+			}
 		}
 
 		private static void PrintTaskInfo(ProjectTask task, int indent = 1)

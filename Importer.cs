@@ -3,7 +3,7 @@ using Microsoft.Office.Interop.MSProject;
 
 namespace ProjectAutomata
 {
-	class Importer
+	class Importer : ProjectWorker
 	{
 		public void Import(string fileName)
 		{
@@ -41,13 +41,7 @@ namespace ProjectAutomata
 
 		private Project OpenProject()
 		{
-			var msProject = new Application
-			{
-				Visible = true
-			};
-
-			var application = msProject.Application;
-			var project = application.Projects.Add();
+			var project = Application.Projects.Add();
 			return project;
 		}
 
