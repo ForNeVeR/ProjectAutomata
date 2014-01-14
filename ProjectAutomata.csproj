@@ -51,8 +51,8 @@
     <Compile Include="Parser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ProjectTask.cs" />
+    <Compile Include="ProjectWorker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TaskDescription.cs" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="Microsoft.Office.Core">

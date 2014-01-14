@@ -14,7 +14,7 @@ issue if you're experiencing difficulties.
 Run in console:
 
     ProjectAutomata import textfile.org
-    ProjectAutomata export project.prj
+    ProjectAutomata export project.mpp
 
 `import` option will create new Project file and create tasks from the input
 file (see file format below).

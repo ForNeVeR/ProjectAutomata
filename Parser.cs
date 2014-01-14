@@ -10,9 +10,9 @@ namespace ProjectAutomata
 		private static readonly Regex TaskHeader = new Regex(@"^(\*+)(?: \[(.*?)\])? (.*)$", RegexOptions.Compiled);
 		private static readonly Regex Number = new Regex(@"\d+(\.\d+)?", RegexOptions.Compiled);
 		
-		public IEnumerable<TaskDescription> Parse(string fileName)
+		public IEnumerable<ProjectTask> Parse(string fileName)
 		{
-			TaskDescription task = null;
+			ProjectTask task = null;
 			foreach (var line in File.ReadLines(fileName))
 			{
 				var match = TaskHeader.Match(line);
@@ -22,24 +22,15 @@ namespace ProjectAutomata
 					{
 						yield return task;
 					}
-					
-					task = new TaskDescription
-					{
-						Level = match.Groups[1].Value.Length,
-						Estimation = ParseEstimation(match.Groups[2].Value),
-						Name = match.Groups[3].Value
-					};
+
+					task = new ProjectTask(
+						match.Groups[3].Value,
+						ParseEstimation(match.Groups[2].Value),
+						match.Groups[1].Value.Length);
 				}
 				else if (task != null)
 				{
-					if (task.Note == null)
-					{
-						task.Note = line;
-					}
-					else
-					{
-						task.Note += "\n" + line;
-					}
+					task.AddNoteLine(line);
 				}
 			}
 
